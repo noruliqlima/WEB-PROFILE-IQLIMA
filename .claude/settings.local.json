@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Write-Host \"=== firebase usage ===\"; Select-String -Path app.jsx -Pattern \"firebase|firestore|getFirestore|window\\\\.|localStorage|sessionStorage\" -AllMatches | ForEach-Object { $_.LineNumber.ToString\\(\\) + \": \" + $_.Line.Trim\\(\\) } | Select-Object -First 30)"
+    ]
+  }
+}
