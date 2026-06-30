@@ -162,48 +162,47 @@ function readSharedFromUrl() {
   return null;
 }
 
-/* ─── Firebase (isi config kau di sini selepas cipta projek) ───────────────
-   1. console.firebase.google.com → Project Settings → Your apps → Web app → firebaseConfig
-   2. Tukar nilai "YOUR_..." dengan nilai sebenar dari Firebase Console
-   3. Dalam Firebase Console: aktifkan Firestore (test mode) + Storage (test mode)
+/* ─── Supabase (backend percuma — simpan data & gambar ke cloud) ───────────────
+   1. supabase.com → cipta projek (percuma, tiada kad)
+   2. Settings → API → salin "Project URL" & "anon public" key
+   3. Tampal kedua-duanya di bawah
    ─────────────────────────────────────────────────────────────────────────── */
-const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyBM-i9RJlHNwP1KSkY-xV117vAlL1seKcQ",
-  authDomain:        "web-profil-iqlima.firebaseapp.com",
-  projectId:         "web-profil-iqlima",
-  storageBucket:     "web-profil-iqlima.firebasestorage.app",
-  messagingSenderId: "402836655914",
-  appId:             "1:402836655914:web:588d6bf0bb8e29d4e3d853",
-};
-const FB_ENABLED = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY" && typeof firebase !== 'undefined';
+const SUPABASE_URL = "https://gtolgxdjagnssmmrtcst.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_hx1x1OOMhdCVh8t93KJaRg_tjrGISUZ";
+const SUPA_ENABLED = SUPABASE_URL.indexOf("YOUR_PROJECT") === -1
+  && typeof window !== 'undefined' && window.supabase && window.supabase.createClient;
+const FB_ENABLED = SUPA_ENABLED; // kekalkan nama lama untuk paparan status admin
 
-function getFb() {
-  if (!FB_ENABLED) return null;
+function getSupa() {
+  if (!SUPA_ENABLED) return null;
   try {
-    if (!window._fbApp) window._fbApp = firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(FIREBASE_CONFIG);
-    return { db: firebase.firestore(), st: firebase.storage() };
+    if (!window._supaClient) window._supaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return window._supaClient;
   } catch (e) { return null; }
 }
 
 async function fbUploadImage(file, path) {
-  const fb = getFb(); if (!fb) return null;
+  const supa = getSupa(); if (!supa) return null;
   try {
-    const ref = fb.st.ref(path);
-    await ref.put(file);
-    return await ref.getDownloadURL();
-  } catch (e) { console.error('fbUpload', e); return null; }
+    const cleanPath = (path || ('img/' + Date.now())).replace(/[^a-zA-Z0-9._/-]/g, '_');
+    const { error } = await supa.storage.from('images').upload(cleanPath, file, { upsert: true, cacheControl: '3600' });
+    if (error) throw error;
+    const { data } = supa.storage.from('images').getPublicUrl(cleanPath);
+    return data && data.publicUrl ? data.publicUrl : null;
+  } catch (e) { console.error('supaUpload', e); return null; }
 }
 
 async function fbSave(data) {
-  const fb = getFb(); if (!fb) return;
-  try { await fb.db.collection('sites').doc('iqlima').set(data); } catch (e) { console.error('fbSave', e); }
+  const supa = getSupa(); if (!supa) return;
+  try { await supa.from('site_data').upsert({ id: 'iqlima', data }); } catch (e) { console.error('supaSave', e); }
 }
 
 async function fbLoad() {
-  const fb = getFb(); if (!fb) return null;
+  const supa = getSupa(); if (!supa) return null;
   try {
-    const doc = await fb.db.collection('sites').doc('iqlima').get();
-    return doc.exists ? doc.data() : null;
+    const { data, error } = await supa.from('site_data').select('data').eq('id', 'iqlima').maybeSingle();
+    if (error) return null;
+    return data ? data.data : null;
   } catch (e) { return null; }
 }
 
@@ -427,7 +426,7 @@ function AdminPanel({ profileData, links: initialLinks, products: initialProds, 
           <p className="text-[10px] text-stone-400 dark:text-zinc-500 text-center leading-relaxed">Tekan “Eksport” → hantar fail <b>iqlima-data.json</b> kepada Claude untuk jadikan kekal dalam web.</p>
           <div className={`flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest ${FB_ENABLED ? 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400' : 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400'}`}>
             <div className={`w-2 h-2 rounded-full ${FB_ENABLED ? 'bg-green-500' : 'bg-amber-400'}`}></div>
-            {FB_ENABLED ? 'Firebase Aktif — Gambar tersimpan online ✓' : 'Firebase belum dikonfigurasi'}
+            {FB_ENABLED ? 'Cloud Aktif — data & gambar tersimpan online untuk semua ✓' : 'Cloud belum dikonfigurasi (simpan setempat sahaja)'}
           </div>
         </div>
       </div>
