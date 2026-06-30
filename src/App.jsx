@@ -168,12 +168,12 @@ function readSharedFromUrl() {
    3. Dalam Firebase Console: aktifkan Firestore (test mode) + Storage (test mode)
    ─────────────────────────────────────────────────────────────────────────── */
 const FIREBASE_CONFIG = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_MSG_ID",
-  appId:             "YOUR_APP_ID",
+  apiKey:            "AIzaSyBM-i9RJlHNwP1KSkY-xV117vAlL1seKcQ",
+  authDomain:        "web-profil-iqlima.firebaseapp.com",
+  projectId:         "web-profil-iqlima",
+  storageBucket:     "web-profil-iqlima.firebasestorage.app",
+  messagingSenderId: "402836655914",
+  appId:             "1:402836655914:web:588d6bf0bb8e29d4e3d853",
 };
 const FB_ENABLED = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY" && typeof firebase !== 'undefined';
 

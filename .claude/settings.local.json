@@ -12,7 +12,9 @@
       "PowerShell(git -C $root log origin/main --oneline -5 2>&1)",
       "PowerShell(git -C $root ls-tree -r --name-only origin/main 2>&1)",
       "PowerShell(git -C $root push origin refs/remotes/origin/main:refs/heads/backup-old-main 2>&1)",
-      "PowerShell(git -C $root push -u origin main --force-with-lease 2>&1)"
+      "PowerShell(git -C $root push -u origin main --force-with-lease 2>&1)",
+      "PowerShell(git -C $root add -A 2>&1)",
+      "PowerShell(git -C $root push origin main 2>&1)"
     ]
   }
 }
