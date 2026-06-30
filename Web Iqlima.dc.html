@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+  @theme { --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif; }
+</style>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; }
+  #dc-root, .dc-mount { height: 100%; }
+
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @media (prefers-reduced-motion: reduce) { .fade-up { animation: none; } }
+
+  @keyframes aurora-1 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(30px, -50px) scale(1.1) rotate(5deg); }
+    66% { transform: translate(-20px, 20px) scale(0.9) rotate(-5deg); }
+  }
+  @keyframes aurora-2 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-50px, 30px) scale(1.2) rotate(-5deg); }
+    66% { transform: translate(20px, -20px) scale(0.8) rotate(5deg); }
+  }
+  @keyframes aurora-3 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(20px, 30px) scale(0.9) rotate(5deg); }
+    66% { transform: translate(-30px, -30px) scale(1.1) rotate(-5deg); }
+  }
+  @keyframes aurora-4 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-30px, -50px) scale(1.2) rotate(-5deg); }
+    66% { transform: translate(30px, 20px) scale(0.8) rotate(5deg); }
+  }
+  .animate-aurora-1 { animation: aurora-1 15s ease-in-out infinite alternate; }
+  .animate-aurora-2 { animation: aurora-2 18s ease-in-out infinite alternate; }
+  .animate-aurora-3 { animation: aurora-3 20s ease-in-out infinite alternate; }
+  .animate-aurora-4 { animation: aurora-4 22s ease-in-out infinite alternate; }
+</style>
+</helmet>
+<x-import component-from-global-scope="IqlimaApp" from="./app.jsx" hint-size="100%,100%"></x-import>
+<template id="__bundler_thumbnail" data-bg-color="#eaf2ff">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#38bdf8"/>
+        <stop offset="1" stop-color="#a78bfa"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="800" fill="#eaf2ff"/>
+    <circle cx="600" cy="300" r="120" fill="url(#g)"/>
+    <circle cx="600" cy="300" r="120" fill="none" stroke="#fff" stroke-width="14"/>
+    <rect x="450" y="470" width="300" height="34" rx="17" fill="#1e3a8a"/>
+    <rect x="510" y="528" width="180" height="20" rx="10" fill="#60a5fa"/>
+    <rect x="430" y="600" width="340" height="60" rx="22" fill="url(#g)"/>
+  </svg>
+</template>
+</x-dc>
+</body>
+</html>
