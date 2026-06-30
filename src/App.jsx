@@ -615,16 +615,8 @@ function App() {
           </button>
           <button
             onClick={async () => {
-              // Sanitize: ganti gambar base64 (upload) dengan placeholder supaya link tak terlalu panjang
-              const stripBase64 = (url) => (url && url.startsWith('data:')) ? '' : (url || '');
-              const shareProfile = { ...profileState, avatarUrl: stripBase64(profileState.avatarUrl) };
-              const shareProds = productsState.map(p => ({
-                ...p,
-                imageUrl: stripBase64(p.imageUrl),
-                gallery: (p.gallery || []).filter(g => g && !g.startsWith('data:')),
-              }));
-              const enc = encodeState({ profile: shareProfile, links: linksState, products: shareProds });
-              const shareUrl = window.location.origin + window.location.pathname + '#d=' + encodeURIComponent(enc);
+              // Kongsi link bersih sahaja (profil dimuat dari data app / iqlima-data.json)
+              const shareUrl = window.location.origin + window.location.pathname;
               if (navigator.share) {
                 try { await navigator.share({ title: profileState.name, url: shareUrl }); return; } catch (e) {}
               }
@@ -845,7 +837,7 @@ function App() {
       {shared && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[400] flex items-center gap-2 bg-stone-900/90 dark:bg-white/90 text-white dark:text-stone-900 text-[12px] font-semibold px-4 py-2.5 rounded-full shadow-xl backdrop-blur animate-in fade-in slide-in-from-bottom-2 duration-300">
           <Icon name="check-circle" className="w-4 h-4 text-green-400 dark:text-green-600" />
-          Link disalin — teks & pautan ✓ (gambar upload tidak disertakan)
+          Link web disalin ✓
         </div>
       )}
       {shareErr && (

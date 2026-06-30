@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Write-Host \"=== firebase usage ===\"; Select-String -Path app.jsx -Pattern \"firebase|firestore|getFirestore|window\\\\.|localStorage|sessionStorage\" -AllMatches | ForEach-Object { $_.LineNumber.ToString\\(\\) + \": \" + $_.Line.Trim\\(\\) } | Select-Object -First 30)"
+      "PowerShell(Write-Host \"=== firebase usage ===\"; Select-String -Path app.jsx -Pattern \"firebase|firestore|getFirestore|window\\\\.|localStorage|sessionStorage\" -AllMatches | ForEach-Object { $_.LineNumber.ToString\\(\\) + \": \" + $_.Line.Trim\\(\\) } | Select-Object -First 30)",
+      "mcp__fb16a381-795b-41d9-82cc-eb1f5e5d088f__deploy_to_vercel",
+      "PowerShell(git -C $root remote remove origin 2>$null)",
+      "PowerShell(git -C $root remote add origin https://github.com/noruliqlima/WEB-PROFILE-IQLIMA.git)",
+      "PowerShell(git -C $root remote -v)",
+      "PowerShell(git -C $root ls-remote --heads origin 2>&1)",
+      "PowerShell($root = \"C:\\\\Users\\\\IQLIMA\\\\OneDrive\\\\Desktop\\\\WEB PROFIL IQLIMA30 JUN CALUDE DSIGN\")",
+      "PowerShell(git -C $root fetch origin main 2>&1)",
+      "PowerShell(git -C $root log origin/main --oneline -5 2>&1)",
+      "PowerShell(git -C $root ls-tree -r --name-only origin/main 2>&1)",
+      "PowerShell(git -C $root push origin refs/remotes/origin/main:refs/heads/backup-old-main 2>&1)",
+      "PowerShell(git -C $root push -u origin main --force-with-lease 2>&1)"
     ]
   }
 }

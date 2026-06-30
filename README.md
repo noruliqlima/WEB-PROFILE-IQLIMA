@@ -4,7 +4,7 @@ Web profil **link-in-bio** untuk **@iqlimaraudhah** — Optometris yang suka den
 
 Dibina sebagai projek **Vite + React** (sedia untuk deploy di Vercel).
 
-🔗 **Live:** _(letak URL Vercel kau di sini selepas deploy)_
+🔗 **Live:** https://iqlimaraudhah-profil.vercel.app
 
 ---
 
