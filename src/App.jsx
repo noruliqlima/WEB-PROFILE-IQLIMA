@@ -1,6 +1,7 @@
 // Web Iqlima — link-in-bio profile app (ported from React 19 / Tailwind v4 AI Studio project)
 // Ported to a standalone Vite + React module.
 import { useState, useRef, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 /* ─── Inline lucide-style icons (no external dep) ─────────────────────────── */
 const ICON_PATHS = {
@@ -169,15 +170,15 @@ function readSharedFromUrl() {
    ─────────────────────────────────────────────────────────────────────────── */
 const SUPABASE_URL = "https://gtolgxdjagnssmmrtcst.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_hx1x1OOMhdCVh8t93KJaRg_tjrGISUZ";
-const SUPA_ENABLED = SUPABASE_URL.indexOf("YOUR_PROJECT") === -1
-  && typeof window !== 'undefined' && window.supabase && window.supabase.createClient;
+const SUPA_ENABLED = SUPABASE_URL.indexOf("YOUR_PROJECT") === -1;
 const FB_ENABLED = SUPA_ENABLED; // kekalkan nama lama untuk paparan status admin
 
+let _supaClient = null;
 function getSupa() {
   if (!SUPA_ENABLED) return null;
   try {
-    if (!window._supaClient) window._supaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    return window._supaClient;
+    if (!_supaClient) _supaClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return _supaClient;
   } catch (e) { return null; }
 }
 
