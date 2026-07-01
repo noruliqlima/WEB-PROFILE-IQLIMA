@@ -1,7 +1,6 @@
 // Web Iqlima — link-in-bio profile app (ported from React 19 / Tailwind v4 AI Studio project)
 // Ported to a standalone Vite + React module.
 import { useState, useRef, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
 /* ─── Inline lucide-style icons (no external dep) ─────────────────────────── */
 const ICON_PATHS = {
@@ -173,17 +172,26 @@ const SUPABASE_ANON_KEY = "sb_publishable_hx1x1OOMhdCVh8t93KJaRg_tjrGISUZ";
 const SUPA_ENABLED = SUPABASE_URL.indexOf("YOUR_PROJECT") === -1;
 const FB_ENABLED = SUPA_ENABLED; // kekalkan nama lama untuk paparan status admin
 
+// Muat pustaka Supabase secara "lazy" (selepas halaman keluar) supaya bundle
+// utama kekal kecil & paparan pertama laju.
 let _supaClient = null;
-function getSupa() {
+let _supaLoading = null;
+async function getSupa() {
   if (!SUPA_ENABLED) return null;
+  if (_supaClient) return _supaClient;
   try {
-    if (!_supaClient) _supaClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    return _supaClient;
+    if (!_supaLoading) {
+      _supaLoading = import('@supabase/supabase-js').then((m) => {
+        _supaClient = m.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return _supaClient;
+      });
+    }
+    return await _supaLoading;
   } catch (e) { return null; }
 }
 
 async function fbUploadImage(file, path) {
-  const supa = getSupa(); if (!supa) return null;
+  const supa = await getSupa(); if (!supa) return null;
   try {
     const cleanPath = (path || ('img/' + Date.now())).replace(/[^a-zA-Z0-9._/-]/g, '_');
     const { error } = await supa.storage.from('images').upload(cleanPath, file, { upsert: true, cacheControl: '3600' });
@@ -194,12 +202,12 @@ async function fbUploadImage(file, path) {
 }
 
 async function fbSave(data) {
-  const supa = getSupa(); if (!supa) return;
+  const supa = await getSupa(); if (!supa) return;
   try { await supa.from('site_data').upsert({ id: 'iqlima', data }); } catch (e) { console.error('supaSave', e); }
 }
 
 async function fbLoad() {
-  const supa = getSupa(); if (!supa) return null;
+  const supa = await getSupa(); if (!supa) return null;
   try {
     const { data, error } = await supa.from('site_data').select('data').eq('id', 'iqlima').maybeSingle();
     if (error) return null;
